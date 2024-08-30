@@ -109,7 +109,8 @@ namespace AsuAsopFilesProcessing
             //===========================================================================================
             //3 - читаем входной файл и формируем все остальные колонки
             //===========================================================================================
-            StreamReader reader = new StreamReader(FileName, Encoding.Default);
+            StreamReader reader = new StreamReader(FileName, Encoding.GetEncoding("windows-1252"));//GetEncoding("UTF-8")
+            var encoding = reader.CurrentEncoding;
             while (!reader.EndOfStream)
             {
                 
@@ -168,12 +169,16 @@ namespace AsuAsopFilesProcessing
             string namefile = Path.GetFileNameWithoutExtension(FileName);
             string save_filename = namefile + " cor " + @".csv";
 
-            FileInfo f = new FileInfo(target + @"\" + save_filename);
+            FileStream fs = null;
+            fs = new FileStream(target + @"\" + save_filename, FileMode.Create);
+            //FileInfo f = new FileInfo(target + @"\" + save_filename);
+
             //StreamWriter sw = f.AppendText();
 
             try
             {
-                StreamWriter sw = f.CreateText();
+                //StreamWriter sw = f.CreateText();
+                StreamWriter sw = new StreamWriter(fs, Encoding.GetEncoding("windows-1252"));
 
                 foreach (string line in oslines)
                 {
